@@ -11,6 +11,8 @@ import Icon from "react-native-vector-icons/Feather";
 import { IProduct } from "../store/features/addSlice";
 import ItemList from "../components/ItemList/index";
 import { useNavigation } from "@react-navigation/native";
+import { useSelector } from "react-redux";
+import { RootState } from "../store";
 
 export const dataPriceProducts = [
   {
@@ -48,15 +50,16 @@ export const dataPriceProducts = [
 const Home = () => {
   const [products, setProducts] = useState<IProduct[]>(dataPriceProducts);
 
-  const navigation = useNavigation()
+  const productsState = useSelector((state: RootState)=>state.addReducer)
 
-  useEffect(()=>{console.log('mudou')},[products])
+  const navigation = useNavigation()
 
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.title}>Lista de produtos</Text>
         <TouchableOpacity onPress={()=>navigation.navigate('Cart' as never)}>
+          {productsState.length > 0 && <View style={styles.iconNotification} ></View>}
           <Icon name="shopping-cart" size={32} />
         </TouchableOpacity>
       </View>
@@ -85,6 +88,15 @@ const styles = StyleSheet.create({
     color: "black",
     fontSize: 24,
   },
+  iconNotification:{
+    position:'absolute',
+    height:10,
+    right:8,
+    bottom:25,
+    borderRadius:15,
+    width:10,
+    backgroundColor: 'red'
+  }
 });
 
 export default Home;
